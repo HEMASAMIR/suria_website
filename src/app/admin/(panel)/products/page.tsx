@@ -96,8 +96,8 @@ export default function ProductsPage() {
                       </div>
                     </td>
                     <td className="px-4 py-3 text-muted">{catName(p.categoryId)}</td>
-                    <td className="px-4 py-3 font-bold">{egp(p.price)}</td>
-                    <td className="px-4 py-3 text-muted">{egp(p.cost)}</td>
+                    <td className="whitespace-nowrap px-4 py-3 font-bold">{egp(p.price)}</td>
+                    <td className="whitespace-nowrap px-4 py-3 text-muted">{egp(p.cost)}</td>
                     <td className="px-4 py-3">
                       <span className={`font-bold ${margin >= 0 ? "text-emerald-600 dark:text-emerald-400" : "text-rose-600"}`}>{egp(margin)}</span>
                       <span className="mr-1 text-xs text-muted">({p.price ? Math.round((margin / p.price) * 100) : 0}%)</span>

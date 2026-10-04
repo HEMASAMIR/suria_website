@@ -71,8 +71,8 @@ export default function OrdersPage() {
                   <td className="px-4 py-3"><b>{o.customer.name}</b><p className="text-xs text-muted" dir="ltr">{o.customer.phone}</p></td>
                   <td className="px-4 py-3">{o.customer.governorate}</td>
                   <td className="px-4 py-3">{o.items.reduce((s, x) => s + x.qty, 0)}</td>
-                  <td className="px-4 py-3 font-bold">{egp(o.total)}</td>
-                  <td className="px-4 py-3 font-bold text-emerald-600 dark:text-emerald-400">{egp(profitOf(o))}</td>
+                  <td className="whitespace-nowrap px-4 py-3 font-bold">{egp(o.total)}</td>
+                  <td className="whitespace-nowrap px-4 py-3 font-bold text-emerald-600 dark:text-emerald-400">{egp(profitOf(o))}</td>
                   <td className="px-4 py-3 text-xs">{PAYMENT[o.paymentMethod]}</td>
                   <td className="px-4 py-3">
                     <select value={o.status} onChange={(e) => setStatus(o, e.target.value as OrderStatus)} className={`cursor-pointer rounded-full border-0 px-3 py-1.5 text-xs font-bold outline-none ${STATUS[o.status].tone}`}>

@@ -7,18 +7,7 @@ import {
   ArrowLeft, ArrowUp, Clock, FolderHeart, LifeBuoy, LogIn, Mail, MapPin, MessageCircle, Package, Phone, RefreshCcw, ShoppingBag, Star, Truck,
 } from "lucide-react";
 import type { Category, Settings } from "@/lib/types";
-
-const ICONS = {
-  instagram: "M12 2.2c3.2 0 3.6 0 4.8.1 1.2.1 1.8.2 2.2.4.6.2 1 .5 1.4.9.4.4.7.8.9 1.4.2.4.4 1.1.4 2.2.1 1.3.1 1.6.1 4.8s0 3.6-.1 4.8c-.1 1.2-.2 1.8-.4 2.2-.2.6-.5 1-.9 1.4-.4.4-.8.7-1.4.9-.4.2-1.1.4-2.2.4-1.3.1-1.6.1-4.8.1s-3.6 0-4.8-.1c-1.2-.1-1.8-.2-2.2-.4-.6-.2-1-.5-1.4-.9-.4-.4-.7-.8-.9-1.4-.2-.4-.4-1.1-.4-2.2C2.2 15.6 2.2 15.2 2.2 12s0-3.6.1-4.8c.1-1.2.2-1.8.4-2.2.2-.6.5-1 .9-1.4.4-.4.8-.7 1.4-.9.4-.2 1.1-.4 2.2-.4C8.4 2.2 8.8 2.2 12 2.2zm0 4.6a5.2 5.2 0 1 0 0 10.4 5.2 5.2 0 0 0 0-10.4zm0 8.6a3.4 3.4 0 1 1 0-6.8 3.4 3.4 0 0 1 0 6.8zm5.4-9.9a1.2 1.2 0 1 0 0 2.4 1.2 1.2 0 0 0 0-2.4z",
-  facebook: "M14 8.5V6.6c0-.8.2-1.3 1.4-1.3H17V2.2C16.7 2.1 15.7 2 14.6 2 12.2 2 10.6 3.4 10.6 6.1v2.4H8v3.2h2.6V22H14V11.7h2.7l.4-3.2H14z",
-  tiktok: "M16.6 5.8A4.3 4.3 0 0 1 15.5 3h-3.1v12.4a2.6 2.6 0 1 1-2.6-2.6c.3 0 .5 0 .8.1V9.7a5.8 5.8 0 1 0 4.9 5.7V9.1a7.3 7.3 0 0 0 4.3 1.4V7.4a4.3 4.3 0 0 1-3.2-1.6z",
-};
-
-const SOCIAL_STYLE: Record<keyof typeof ICONS, string> = {
-  instagram: "hover:bg-[linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888)] hover:shadow-[#dc2743]/40",
-  facebook: "hover:bg-[#1877f2] hover:shadow-[#1877f2]/40",
-  tiktok: "hover:bg-black hover:shadow-[#25f4ee]/40",
-};
+import { activeSocials } from "@/lib/social";
 
 const col = {
   hidden: { opacity: 0, y: 40 },
@@ -64,7 +53,7 @@ function useOpenNow() {
 
 export function FooterColumns({ settings, categories }: { settings: Settings; categories: Category[] }) {
   const open = useOpenNow();
-  const socials = (["instagram", "facebook", "tiktok"] as const).filter((k) => settings[k]);
+  const socials = activeSocials(settings);
 
   return (
     <motion.div initial="hidden" whileInView="show" viewport={{ once: true, margin: "-60px" }} className="container-z relative grid gap-6 py-14 md:grid-cols-2 lg:grid-cols-[1.25fr_1fr_.9fr_1.15fr]">
@@ -85,22 +74,22 @@ export function FooterColumns({ settings, categories }: { settings: Settings; ca
         </div>
 
         {socials.length > 0 && (
-          <div className="mt-6 flex gap-2.5">
-            {socials.map((k, i) => (
+          <div className="mt-6 flex flex-wrap gap-2.5">
+            {socials.map((so, i) => (
               <motion.a
-                key={k}
-                href={settings[k]}
+                key={so.key}
+                href={settings[so.key]}
                 target="_blank"
                 rel="noreferrer"
-                aria-label={k}
+                aria-label={so.label}
                 initial={{ scale: 0, rotate: -90 }}
                 whileInView={{ scale: 1, rotate: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.4 + i * 0.1, type: "spring", stiffness: 260 }}
-                className={`group relative grid size-11 place-items-center rounded-2xl border border-white/15 bg-white/[.04] transition duration-300 hover:-translate-y-1.5 hover:border-transparent hover:shadow-xl ${SOCIAL_STYLE[k]}`}
+                className={`group relative grid size-11 place-items-center rounded-2xl border border-white/15 bg-white/[.04] transition duration-300 hover:-translate-y-1.5 hover:border-transparent hover:shadow-xl ${so.hover}`}
               >
-                <svg viewBox="0 0 24 24" className="size-[18px] fill-current transition group-hover:scale-110"><path d={ICONS[k]} /></svg>
-                <span className="pointer-events-none absolute -top-9 rounded-lg bg-white px-2 py-1 text-[10px] font-bold capitalize text-[#0e2c4e] opacity-0 transition group-hover:-top-10 group-hover:opacity-100">{k}</span>
+                <svg viewBox="0 0 24 24" className="size-[18px] fill-current transition group-hover:scale-110"><path d={so.path} /></svg>
+                <span className="pointer-events-none absolute -top-9 rounded-lg bg-white px-2 py-1 text-[10px] font-bold text-[#0e2c4e] opacity-0 transition group-hover:-top-10 group-hover:opacity-100">{so.label}</span>
               </motion.a>
             ))}
           </div>

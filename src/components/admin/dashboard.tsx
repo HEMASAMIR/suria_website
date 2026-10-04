@@ -78,7 +78,9 @@ export function Dashboard({ orders, expenses, lowStock, now }: { orders: Order[]
         </div>
       </PageHeader>
 
-      <div className="relative mb-6 overflow-hidden rounded-[2rem] bg-welcome p-6 text-white sm:p-8">
+      <div className="relative mb-6 overflow-hidden rounded-[2rem] bg-welcome p-6 text-white shadow-[0_30px_60px_-30px_rgba(14,44,78,.6)] sm:p-8">
+        <div className="bridal-orb pointer-events-none absolute -left-16 -top-16 size-64 rounded-full bg-[#5eead4]/30 blur-[80px]" />
+        <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(110deg,transparent_35%,rgba(255,255,255,.14)_50%,transparent_65%)] bg-[length:250%_100%] animate-shimmer" />
         <p className="pointer-events-none absolute -bottom-6 left-4 select-none font-serif text-8xl text-white/10">ZONA</p>
         <div className="relative grid gap-6 sm:grid-cols-3">
           <div>

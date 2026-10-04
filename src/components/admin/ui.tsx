@@ -1,7 +1,9 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { usePathname } from "next/navigation";
+import { AnimatePresence, animate, motion, useInView } from "framer-motion";
+import { navFor } from "./nav";
 import { ImagePlus, Loader2, Trash2, X, GripVertical } from "lucide-react";
 import { toast } from "sonner";
 
@@ -45,14 +47,36 @@ export function useCollection<T extends { id: string }>(name: string) {
 }
 
 export function PageHeader({ title, sub, children }: { title: string; sub?: string; children?: React.ReactNode }) {
+  const nav = navFor(usePathname());
   return (
-    <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
-      <div>
-        <h1 className="text-2xl font-extrabold sm:text-3xl">{title}</h1>
-        {sub && <p className="mt-1 text-sm text-muted">{sub}</p>}
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+      className="relative mb-8 overflow-hidden rounded-[2rem] border border-line bg-surface/80 p-5 shadow-[0_20px_50px_-30px_rgba(14,44,78,.35)] backdrop-blur sm:p-6"
+    >
+      <div className="pointer-events-none absolute -left-16 -top-16 size-48 rounded-full bg-primary/10 blur-3xl" />
+      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(110deg,transparent_40%,rgba(20,184,166,.08)_50%,transparent_60%)] bg-[length:250%_100%] animate-shimmer" />
+      <div className="relative flex flex-wrap items-center justify-between gap-4">
+        <div className="flex items-center gap-4">
+          <motion.span
+            initial={{ scale: 0, rotate: -30 }}
+            animate={{ scale: 1, rotate: 0 }}
+            transition={{ type: "spring", stiffness: 260, delay: 0.1 }}
+            className="relative grid size-14 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-primary to-[#0e2c4e] text-white shadow-lg shadow-primary/30"
+          >
+            <nav.icon className="size-6" />
+            <span className="absolute -left-1 -top-1 size-3 rounded-full bg-gold ring-4 ring-surface" />
+          </motion.span>
+          <div>
+            <p className="text-gradient animate-shimmer font-serif text-[11px] font-bold italic tracking-[.3em]">{nav.kicker}</p>
+            <h1 className="text-2xl font-extrabold sm:text-3xl">{title}</h1>
+            {sub && <p className="mt-0.5 text-sm text-muted">{sub}</p>}
+          </div>
+        </div>
+        <div className="flex flex-wrap gap-2">{children}</div>
       </div>
-      <div className="flex flex-wrap gap-2">{children}</div>
-    </div>
+    </motion.div>
   );
 }
 
@@ -199,23 +223,58 @@ export function ActiveChip({ on, yes, no }: { on: boolean; yes: string; no: stri
   );
 }
 
+/** Animates the numeric part of a formatted value (e.g. "1,998 ج.م", "39%") from 0. */
+export function CountUp({ value }: { value: string }) {
+  const m = value.match(/-?[\d,]+(\.\d+)?/);
+  const target = m ? Number(m[0].replace(/,/g, "")) : NaN;
+  const ref = useRef<HTMLSpanElement>(null);
+  const inView = useInView(ref, { once: true });
+  const [n, setN] = useState(0);
+  useEffect(() => {
+    if (!inView || Number.isNaN(target)) return;
+    const c = animate(0, target, { duration: 1.4, ease: [0.22, 1, 0.36, 1], onUpdate: (v) => setN(v) });
+    return () => c.stop();
+  }, [inView, target]);
+  if (!m || Number.isNaN(target)) return <span ref={ref}>{value}</span>;
+  const shown = Math.round(n).toLocaleString("en-US");
+  return <span ref={ref}>{value.replace(m[0], shown)}</span>;
+}
+
 export function StatCard({ label, value, tone = "", hint, icon: Icon }: { label: string; value: string; tone?: string; hint?: string; icon?: React.ComponentType<{ className?: string }> }) {
   return (
-    <motion.div whileHover={{ y: -4 }} className="card relative overflow-hidden p-5">
+    <motion.div
+      initial={{ opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-30px" }}
+      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+      whileHover={{ y: -5 }}
+      onMouseMove={(e) => {
+        const r = e.currentTarget.getBoundingClientRect();
+        e.currentTarget.style.setProperty("--x", `${e.clientX - r.left}px`);
+        e.currentTarget.style.setProperty("--y", `${e.clientY - r.top}px`);
+      }}
+      className="spotlight glow-border group relative overflow-hidden rounded-[1.75rem] border border-line bg-surface p-5 shadow-[0_15px_40px_-30px_rgba(14,44,78,.4)] transition-shadow hover:shadow-[0_25px_50px_-25px_rgba(13,148,136,.35)]"
+    >
+      <span className="pointer-events-none absolute -bottom-10 -left-10 size-28 rounded-full bg-primary/5 transition duration-500 group-hover:scale-150 group-hover:bg-primary/10" />
       {Icon && (
-        <span className="absolute left-4 top-4 grid size-10 place-items-center rounded-2xl bg-primary-soft text-primary">
+        <span className="absolute left-4 top-4 grid size-11 place-items-center rounded-2xl bg-gradient-to-br from-primary to-[#0e2c4e] text-white shadow-lg shadow-primary/25 transition duration-500 group-hover:-rotate-6 group-hover:scale-110">
           <Icon className="size-5" />
         </span>
       )}
-      <p className="text-xs font-bold text-muted">{label}</p>
-      <p className={`mt-2 text-2xl font-extrabold ${tone}`}>{value}</p>
-      {hint && <p className="mt-1 text-xs text-muted">{hint}</p>}
+      <p className="relative text-xs font-bold text-muted">{label}</p>
+      <p className={`relative mt-2 text-2xl font-extrabold ${tone}`}><CountUp value={value} /></p>
+      {hint && <p className="relative mt-1 text-xs text-muted">{hint}</p>}
     </motion.div>
   );
 }
 
 export function Empty({ text }: { text: string }) {
-  return <div className="card py-16 text-center text-muted">{text}</div>;
+  return (
+    <div className="card relative overflow-hidden py-16 text-center">
+      <span className="mx-auto grid size-16 animate-float place-items-center rounded-2xl bg-gradient-to-br from-primary/15 to-gold/15 text-2xl">✨</span>
+      <p className="mt-4 font-bold text-muted">{text}</p>
+    </div>
+  );
 }
 
 export function Skeleton({ rows = 5 }: { rows?: number }) {

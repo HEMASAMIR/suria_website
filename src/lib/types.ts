@@ -129,6 +129,10 @@ export type Settings = {
   instagram: string;
   facebook: string;
   tiktok: string;
+  snapchat?: string;
+  youtube?: string;
+  x?: string;
+  telegram?: string;
   freeShippingThreshold: number;
   instapay: string;
   vodafoneCash: string;

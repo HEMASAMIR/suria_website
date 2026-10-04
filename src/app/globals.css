@@ -266,3 +266,14 @@ body {
 /* ---------- Reviews marquee ---------- */
 .reviews-track { animation: ticker 55s linear infinite; }
 .reviews-track-rev { animation: ticker 60s linear infinite reverse; }
+
+/* ---------- Admin ---------- */
+.admin-side {
+  background:
+    radial-gradient(ellipse at 100% 0%, rgba(45, 212, 191, .18), transparent 50%),
+    linear-gradient(180deg, #0e2c4e 0%, #0b2340 55%, #081a30 100%);
+  box-shadow: -20px 0 50px -30px rgba(8, 26, 48, .6);
+}
+.reveal { opacity: 0; transform: translateY(26px) scale(.985); transition: opacity .7s cubic-bezier(.22,1,.36,1), transform .7s cubic-bezier(.22,1,.36,1); }
+.reveal.in { opacity: 1; transform: none; }
+@keyframes ring { 0%, 70%, 100% { transform: rotate(0); } 75% { transform: rotate(14deg); } 80% { transform: rotate(-12deg); } 85% { transform: rotate(9deg); } 90% { transform: rotate(-6deg); } }

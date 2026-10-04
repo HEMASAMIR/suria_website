@@ -5,6 +5,8 @@ import { Loader2, Save } from "lucide-react";
 import { toast } from "sonner";
 import { ImagesInput, PageHeader, Skeleton, api } from "@/components/admin/ui";
 import type { Settings } from "@/lib/types";
+import { SOCIALS } from "@/lib/social";
+import { ExternalLink } from "lucide-react";
 
 type Key = keyof Settings;
 const SECTIONS: { title: string; fields: { k: Key; l: string; t?: "number" | "textarea"; ltr?: boolean }[] }[] = [
@@ -25,14 +27,11 @@ const SECTIONS: { title: string; fields: { k: Key; l: string; t?: "number" | "te
     ],
   },
   {
-    title: "التواصل والسوشيال",
+    title: "التواصل",
     fields: [
       { k: "whatsapp", l: "رقم واتساب (بالصيغة الدولية 2010...)", ltr: true },
       { k: "phone", l: "رقم الهاتف", ltr: true },
       { k: "email", l: "البريد الإلكتروني", ltr: true },
-      { k: "instagram", l: "رابط Instagram", ltr: true },
-      { k: "facebook", l: "رابط Facebook", ltr: true },
-      { k: "tiktok", l: "رابط TikTok", ltr: true },
     ],
   },
   {
@@ -98,6 +97,40 @@ export default function SettingsPage() {
             </div>
           </section>
         ))}
+        <section className="card p-6 xl:col-span-2">
+          <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
+            <div>
+              <h2 className="font-extrabold">السوشيال ميديا</h2>
+              <p className="mt-1 text-xs text-muted">اكتبي لينك الصفحة كامل — أي منصة فاضية مش هتظهر في الموقع</p>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {SOCIALS.filter((x) => (s[x.key] ?? "").trim()).map((x) => (
+                <span key={x.key} className="grid size-9 place-items-center rounded-xl text-white shadow-md" style={{ background: x.color }} title={x.label}>
+                  <svg viewBox="0 0 24 24" className={`size-4 fill-current ${x.key === "snapchat" ? "text-black" : ""}`}><path d={x.path} /></svg>
+                </span>
+              ))}
+            </div>
+          </div>
+          <div className="grid gap-3 md:grid-cols-2">
+            {SOCIALS.map((x) => {
+              const v = s[x.key] ?? "";
+              return (
+                <div key={x.key} className="group flex items-center gap-3 rounded-2xl border border-line bg-surface-2 p-2 pr-3 transition focus-within:border-primary focus-within:ring-4 focus-within:ring-primary/10">
+                  <span className="grid size-10 shrink-0 place-items-center rounded-xl text-white shadow-md transition group-focus-within:scale-110" style={{ background: x.color }}>
+                    <svg viewBox="0 0 24 24" className={`size-[18px] fill-current ${x.key === "snapchat" ? "text-black" : ""}`}><path d={x.path} /></svg>
+                  </span>
+                  <span className="w-20 shrink-0 text-sm font-bold">{x.label}</span>
+                  <input dir="ltr" value={v} onChange={(e) => set(x.key, e.target.value)} placeholder={x.placeholder} className="min-w-0 flex-1 bg-transparent py-2 text-right text-xs outline-none placeholder:text-muted/60" />
+                  {v.trim() && (
+                    <a href={v} target="_blank" rel="noreferrer" title="جرّبي اللينك" className="grid size-9 shrink-0 place-items-center rounded-xl text-muted transition hover:bg-primary-soft hover:text-primary">
+                      <ExternalLink className="size-4" />
+                    </a>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </section>
         <section className="card p-6 xl:col-span-2">
           <h2 className="mb-2 font-extrabold">فيديوهات الريلز</h2>
           <p className="mb-4 text-xs text-muted">رابط فيديو MP4 في كل سطر (ممكن ترفعيه على أي استضافة أو تحطيه في مجلد public/videos)</p>
