@@ -4,18 +4,22 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
-import { BadgePercent, CheckCircle2, Loader2, Lock, Smartphone, Truck, Wallet } from "lucide-react";
+import { BadgePercent, CheckCircle2, Loader2, Lock, LogIn, Smartphone, Truck, Wallet } from "lucide-react";
 import { toast } from "sonner";
 import { useCart } from "./cart-context";
 import { egp } from "@/lib/format";
-import type { PaymentMethod, Settings, ShippingZone } from "@/lib/types";
+import type { PaymentMethod, PublicCustomer, Settings, ShippingZone } from "@/lib/types";
 
 type Pay = { id: PaymentMethod; label: string; sub: string; icon: typeof Wallet };
 
-export function CheckoutForm({ zones, settings }: { zones: ShippingZone[]; settings: Settings }) {
+export function CheckoutForm({ zones, settings, me }: { zones: ShippingZone[]; settings: Settings; me: PublicCustomer | null }) {
   const { lines, subtotal, clear } = useCart();
   const router = useRouter();
-  const [f, setF] = useState({ name: "", phone: "", phone2: "", governorate: "", city: "", address: "", notes: "" });
+  const [f, setF] = useState({
+    name: me?.name ?? "", phone: me?.phone ?? "", phone2: "",
+    governorate: me?.address && zones.some((z) => z.governorate === me.address!.governorate) ? me.address.governorate : "",
+    city: me?.address?.city ?? "", address: me?.address?.address ?? "", notes: "",
+  });
   const [pay, setPay] = useState<PaymentMethod>("cod");
   const [code, setCode] = useState("");
   const [coupon, setCoupon] = useState<{ code: string; discount: number } | null>(null);
@@ -83,6 +87,18 @@ export function CheckoutForm({ zones, settings }: { zones: ShippingZone[]; setti
   return (
     <form onSubmit={submit} className="grid gap-8 lg:grid-cols-[1fr_400px]">
       <div className="space-y-6">
+        {me ? (
+          <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="flex items-center gap-3 rounded-2xl border border-primary/30 bg-primary-soft p-4 text-sm">
+            <span className="grid size-10 place-items-center rounded-full bg-gradient-to-br from-primary to-[#0e2c4e] font-bold text-white">{me.name[0]}</span>
+            <span className="flex-1">مسجّلة باسم <b>{me.name}</b> — بياناتك اتكتبت تلقائي والطلب هيظهر في <Link href="/account" className="font-bold text-primary underline">حسابك</Link></span>
+          </motion.div>
+        ) : (
+          <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="flex flex-wrap items-center gap-3 rounded-2xl border border-dashed border-primary/40 bg-surface p-4 text-sm">
+            <LogIn className="size-5 text-primary" />
+            <span className="flex-1">عندك حساب؟ سجّلي دخولك عشان بياناتك تتكتب تلقائي وتتابعي طلبك من حسابك</span>
+            <Link href="/login?next=/checkout" className="btn-primary px-5 py-2 text-xs">دخول</Link>
+          </motion.div>
+        )}
         <motion.section initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="card p-6 sm:p-8">
           <h2 className="mb-6 flex items-center gap-2 text-xl font-extrabold"><span className="grid size-8 place-items-center rounded-full bg-primary text-sm text-white">1</span> بيانات الشحن</h2>
           <div className="grid gap-4 sm:grid-cols-2">

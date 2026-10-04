@@ -63,6 +63,7 @@ export type OrderItem = {
 export type Order = {
   id: string;
   number: string;
+  customerId?: string;
   customer: {
     name: string;
     phone: string;
@@ -135,8 +136,22 @@ export type Settings = {
   videos: string[];
 };
 
+export type Customer = {
+  id: string;
+  name: string;
+  phone: string;
+  email?: string;
+  passwordHash: string;
+  address?: { governorate: string; city: string; address: string };
+  createdAt: string;
+  lastLoginAt?: string;
+};
+
+export type PublicCustomer = Omit<Customer, "passwordHash">;
+
 export type DB = {
   products: Product[];
+  customers: Customer[];
   categories: Category[];
   shipping: ShippingZone[];
   orders: Order[];

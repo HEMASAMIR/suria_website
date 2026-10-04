@@ -16,6 +16,7 @@ export const COLLECTIONS: Record<CollectionName, string> = {
   categories: "cat",
   shipping: "sh",
   orders: "o",
+  customers: "cu",
   coupons: "cp",
   testimonials: "t",
   expenses: "ex",

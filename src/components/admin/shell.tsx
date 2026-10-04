@@ -5,7 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import {
-  BadgePercent, ExternalLink, FolderTree, LayoutDashboard, LogOut, Menu, MessageSquareQuote, Package, Receipt, Settings, ShoppingCart, Truck, X,
+  BadgePercent, ExternalLink, Users, FolderTree, LayoutDashboard, LogOut, Menu, MessageSquareQuote, Package, Receipt, Settings, ShoppingCart, Truck, X,
 } from "lucide-react";
 import { ThemeToggle } from "../theme-toggle";
 
@@ -13,6 +13,7 @@ const NAV = [
   { href: "/admin", label: "لوحة التحكم والأرباح", icon: LayoutDashboard },
   { href: "/admin/orders", label: "الطلبات", icon: ShoppingCart },
   { href: "/admin/products", label: "المنتجات", icon: Package },
+  { href: "/admin/customers", label: "العملاء", icon: Users },
   { href: "/admin/categories", label: "الأقسام", icon: FolderTree },
   { href: "/admin/shipping", label: "الشحن والمحافظات", icon: Truck },
   { href: "/admin/coupons", label: "أكواد الخصم", icon: BadgePercent },

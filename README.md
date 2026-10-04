@@ -43,6 +43,7 @@
 | 🛒 **السلة** | درج جانبي + شريط "فاضلك كام على الشحن المجاني" |
 | 🚚 **الدفع والشحن** | سعر شحن لكل محافظة من الـ 27 + كوبونات + كاش / InstaPay / فودافون كاش |
 | 📦 **تتبع الطلب** | برقم الطلب والموبايل مع Timeline متحرك |
+| 👤 **حسابات العملاء** | تسجيل دخول وحساب جديد (موبايل أو إيميل)، صفحة "حسابي" بالطلبات والعنوان، تعبئة تلقائية في الدفع |
 | 🌗 **لايت / دارك** | تبديل فوري مع رسالة تأكيد |
 
 ## 🧑‍💼 لوحة التحكم
@@ -51,6 +52,7 @@
 |---|---|
 | 📊 **الأرباح** | صافي الربح المحقق والمتوقع، المبيعات، هامش الربح، رسم بياني، حالات الطلبات، الأكثر مبيعًا، المخزون القليل |
 | 🧾 **الطلبات** | تغيير الحالة (المخزون بيرجع تلقائي عند الإلغاء)، ربح كل طلب، طباعة فاتورة، واتساب للعميلة |
+| 👥 **العملاء** | كل الحسابات، عدد الطلبات وإجمالي المشتريات، واتساب مباشر |
 | 👗 **المنتجات** | رفع صور (تتحول WebP تلقائي) وترتيبها بالسحب، ألوان، مقاسات، تكلفة وسعر وربح القطعة، نسخ منتج |
 | 🗂️ **الأقسام • الشحن • الكوبونات • المصروفات • الآراء** | CRUD كامل لكل واحدة |
 | ⚙️ **الإعدادات** | نصوص الهيرو وصوره، شريط الإعلانات، أرقام التواصل، السوشيال، الشحن المجاني، طرق الدفع، الفيديوهات |
@@ -77,6 +79,10 @@
   <tr>
     <td align="center"><b>تتبع الطلب</b><br/><img src="docs/screenshots/track.webp" /></td>
     <td align="center"><b>الفوتر</b><br/><img src="docs/screenshots/footer.webp" /></td>
+  </tr>
+  <tr>
+    <td align="center"><b>حساب جديد</b><br/><img src="docs/screenshots/register.webp" /></td>
+    <td align="center"><b>حسابي وطلباتي</b><br/><img src="docs/screenshots/account.webp" /></td>
   </tr>
   <tr>
     <td align="center"><b>لوحة الأرباح</b><br/><img src="docs/screenshots/admin-dashboard.webp" /></td>
@@ -126,14 +132,14 @@ ADMIN_SECRET=a-long-random-string
 ```text
 src/
 ├─ app/
-│  ├─ (store)/          # Home, shop, product, checkout, order, track
+│  ├─ (store)/          # Home, shop, product, checkout, order, track, login, register, account
 │  ├─ admin/            # Login + panel (dashboard, orders, products, …)
-│  ├─ api/              # Orders, coupons, admin CRUD, upload, login
+│  ├─ api/              # Orders, coupons, customer auth, admin CRUD, upload
 │  └─ uploads/[file]/   # Serves admin-uploaded images
 ├─ components/          # Header, ticker, cart, product cards, motion helpers
 │  ├─ home/             # Hero, sections, showcase (bridal, features, reviews)
 │  └─ admin/            # Shell, CRUD page, dashboard, UI kit
-├─ lib/                 # JSON DB, auth (HMAC cookie), orders, seed data
+├─ lib/                 # JSON DB, auth (HMAC cookies + scrypt passwords), orders, seed
 └─ proxy.ts             # Protects /admin/*
 ```
 

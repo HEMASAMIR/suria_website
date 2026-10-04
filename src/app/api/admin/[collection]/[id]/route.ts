@@ -3,7 +3,8 @@ import { revalidatePath } from "next/cache";
 import { mutateDB } from "@/lib/db";
 import { isAdmin, isCollection, unauthorized } from "@/lib/admin-guard";
 import { applyStatus } from "@/lib/orders";
-import type { Order } from "@/lib/types";
+import { publicCustomer } from "@/lib/customers";
+import type { Customer, Order } from "@/lib/types";
 
 type Ctx = RouteContext<"/api/admin/[collection]/[id]">;
 
@@ -22,6 +23,11 @@ export async function PUT(req: Request, ctx: Ctx) {
         if (data.status) applyStatus(db, order, data.status, data.note);
         if (data.customer) order.customer = { ...order.customer, ...data.customer };
         return order;
+      }
+      if (collection === "customers") {
+        delete data.passwordHash;
+        list[i] = { ...list[i], ...data, id };
+        return publicCustomer(list[i] as Customer);
       }
       list[i] = { ...list[i], ...data, id };
       return list[i];

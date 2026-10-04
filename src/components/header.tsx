@@ -4,14 +4,14 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Menu, Search, ShoppingBag, X } from "lucide-react";
+import { LogIn, Menu, Search, ShoppingBag, User, X } from "lucide-react";
 import { AnnouncementBar } from "./announcement-bar";
 import { Logo } from "./logo";
 import { ThemeToggle } from "./theme-toggle";
 import { useCart } from "./cart-context";
 import type { Category } from "@/lib/types";
 
-export function Header({ announcement, categories, storeName }: { announcement: string; categories: Category[]; storeName: string }) {
+export function Header({ announcement, categories, storeName, user }: { announcement: string; categories: Category[]; storeName: string; user: { name: string } | null }) {
   const { count, setOpen } = useCart();
   const [scrolled, setScrolled] = useState(false);
   const [menu, setMenu] = useState(false);
@@ -72,6 +72,21 @@ export function Header({ announcement, categories, storeName }: { announcement: 
               <Search className="size-[18px]" />
             </button>
             <ThemeToggle />
+            {user ? (
+              <Link href="/account" className="group flex items-center gap-2 rounded-full border border-line bg-surface p-1 pl-1 transition hover:border-primary sm:pl-4" title="حسابي">
+                <span className="grid size-8 place-items-center rounded-full bg-gradient-to-br from-primary to-[#0e2c4e] text-sm font-bold text-white">{user.name[0]}</span>
+                <span className="hidden text-sm font-bold group-hover:text-primary sm:inline">{user.name.split(" ")[0]}</span>
+              </Link>
+            ) : (
+              <>
+                <Link href="/login" aria-label="دخول" className="grid size-10 place-items-center rounded-full border border-line bg-surface transition hover:border-primary hover:text-primary md:hidden">
+                  <User className="size-[18px]" />
+                </Link>
+                <Link href="/login" className="btn-primary hidden px-5 py-2.5 md:inline-flex">
+                  <User className="size-4" /> دخول / حساب جديد
+                </Link>
+              </>
+            )}
             <button onClick={() => setOpen(true)} aria-label="السلة" className="relative grid size-10 place-items-center rounded-full bg-primary text-primary-ink shadow-lg shadow-primary/30 transition hover:scale-105">
               <ShoppingBag className="size-[18px]" />
               <AnimatePresence>
@@ -118,6 +133,9 @@ export function Header({ announcement, categories, storeName }: { announcement: 
                   </motion.div>
                 ))}
               </nav>
+              <Link href={user ? "/account" : "/login"} onClick={() => setMenu(false)} className="btn-primary mt-6 w-full py-3.5">
+                {user ? <><User className="size-4" /> حسابي</> : <><LogIn className="size-4" /> دخول / حساب جديد</>}
+              </Link>
               <div className="mt-auto flex items-center justify-between rounded-2xl bg-surface-2 p-4">
                 <span className="text-sm font-bold">الوضع الليلي / النهاري</span>
                 <ThemeToggle />

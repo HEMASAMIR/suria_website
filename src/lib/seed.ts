@@ -92,6 +92,7 @@ export function createSeed(): DB {
     categories,
     shipping,
     orders: [],
+    customers: [],
     coupons: [
       { id: "cp-1", code: "ZONA10", type: "percent", value: 10, minOrder: 500, usageLimit: 500, used: 0, active: true },
       { id: "cp-2", code: "BRIDE200", type: "fixed", value: 200, minOrder: 2000, usageLimit: 100, used: 0, active: true },

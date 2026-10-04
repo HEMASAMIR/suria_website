@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
 import { mutateDB, readDB, uid } from "@/lib/db";
+import { publicCustomer } from "@/lib/customers";
 import { COLLECTIONS, isAdmin, isCollection, unauthorized } from "@/lib/admin-guard";
 
 export async function GET(_req: Request, ctx: RouteContext<"/api/admin/[collection]">) {
@@ -8,13 +9,14 @@ export async function GET(_req: Request, ctx: RouteContext<"/api/admin/[collecti
   const { collection } = await ctx.params;
   if (!isCollection(collection)) return NextResponse.json({ error: "not found" }, { status: 404 });
   const db = await readDB();
+  if (collection === "customers") return NextResponse.json(db.customers.map(publicCustomer));
   return NextResponse.json(db[collection]);
 }
 
 export async function POST(req: Request, ctx: RouteContext<"/api/admin/[collection]">) {
   if (!(await isAdmin())) return unauthorized();
   const { collection } = await ctx.params;
-  if (!isCollection(collection) || collection === "orders")
+  if (!isCollection(collection) || collection === "orders" || collection === "customers")
     return NextResponse.json({ error: "not allowed" }, { status: 400 });
   const data = await req.json();
   const item = await mutateDB((db) => {

@@ -1,4 +1,6 @@
 import { NextResponse } from "next/server";
+import { cookies } from "next/headers";
+import { CUSTOMER_COOKIE, verifyCustomerToken } from "@/lib/auth";
 import { mutateDB, readDB, uid } from "@/lib/db";
 import { couponDiscount, findCoupon } from "@/lib/orders";
 import type { Order, PaymentMethod } from "@/lib/types";
@@ -20,6 +22,9 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "من فضلك كمّلي بيانات الشحن" }, { status: 400 });
   if (!PHONE.test(c.phone?.trim() ?? ""))
     return NextResponse.json({ error: "رقم الموبايل غير صحيح" }, { status: 400 });
+
+  const jar = await cookies();
+  const customerId = await verifyCustomerToken(jar.get(CUSTOMER_COOKIE)?.value);
 
   try {
     const order = await mutateDB((db) => {
@@ -66,6 +71,11 @@ export async function POST(req: Request) {
         paymentMethod: ["cod", "instapay", "vodafone_cash"].includes(body.paymentMethod) ? body.paymentMethod : "cod",
         status: "pending", history: [{ status: "pending", at: now }], createdAt: now,
       };
+      const acct = customerId ? db.customers.find((x) => x.id === customerId) : undefined;
+      if (acct) {
+        order.customerId = acct.id;
+        acct.address = { governorate: order.customer.governorate, city: order.customer.city, address: order.customer.address };
+      }
       db.orders.unshift(order);
       return order;
     });
