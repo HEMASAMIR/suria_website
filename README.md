@@ -112,6 +112,7 @@ npm run build && npm start   # production
 </div>
 
 ```env
+ADMIN_EMAIL=you@yourstore.com
 ADMIN_PASSWORD=your-strong-password
 ADMIN_SECRET=a-long-random-string
 ```

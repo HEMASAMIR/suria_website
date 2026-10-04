@@ -3,11 +3,12 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { Eye, EyeOff, Loader2, Lock } from "lucide-react";
+import { Eye, EyeOff, Loader2, Lock, Mail } from "lucide-react";
 import { toast } from "sonner";
 import { ThemeToggle } from "@/components/theme-toggle";
 
 export default function LoginPage() {
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [show, setShow] = useState(false);
   const [busy, setBusy] = useState(false);
@@ -16,7 +17,7 @@ export default function LoginPage() {
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     setBusy(true);
-    const r = await fetch("/api/admin/login", { method: "POST", body: JSON.stringify({ password }) });
+    const r = await fetch("/api/admin/login", { method: "POST", body: JSON.stringify({ email, password }) });
     if (!r.ok) {
       setBusy(false);
       return toast.error((await r.json()).error);
@@ -40,12 +41,17 @@ export default function LoginPage() {
         <span className="mx-auto grid size-16 place-items-center rounded-2xl bg-primary text-white shadow-lg shadow-primary/40"><Lock className="size-7" /></span>
         <h1 className="mt-5 text-center font-serif text-3xl tracking-[.2em]">ZONA</h1>
         <p className="mt-1 text-center text-sm text-muted">تسجيل دخول لوحة التحكم</p>
-        <label className="label mt-8">كلمة المرور</label>
+        <label className="label mt-8">البريد الإلكتروني</label>
+        <div className="relative mb-4">
+          <input autoFocus type="email" dir="ltr" value={email} onChange={(e) => setEmail(e.target.value)} className="input pl-12 text-right" placeholder="admin@zona.com" autoComplete="username" />
+          <Mail className="absolute left-4 top-1/2 size-4 -translate-y-1/2 text-muted" />
+        </div>
+        <label className="label">كلمة المرور</label>
         <div className="relative">
-          <input autoFocus type={show ? "text" : "password"} value={password} onChange={(e) => setPassword(e.target.value)} className="input pl-12" placeholder="••••••••" />
+          <input type={show ? "text" : "password"} value={password} onChange={(e) => setPassword(e.target.value)} className="input pl-12" placeholder="••••••••" />
           <button type="button" onClick={() => setShow(!show)} className="absolute left-4 top-1/2 -translate-y-1/2 text-muted">{show ? <EyeOff className="size-4" /> : <Eye className="size-4" />}</button>
         </div>
-        <button disabled={busy || !password} className="btn-primary mt-6 w-full py-3.5">{busy && <Loader2 className="size-4 animate-spin" />} دخول</button>
+        <button disabled={busy || !password || !email} className="btn-primary mt-6 w-full py-3.5">{busy && <Loader2 className="size-4 animate-spin" />} دخول</button>
       </motion.form>
     </div>
   );

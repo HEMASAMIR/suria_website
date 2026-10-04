@@ -4,6 +4,7 @@ const MAX_AGE = 60 * 60 * 24 * 7;
 
 const secret = () => process.env.ADMIN_SECRET || "zona-dev-secret-change-me";
 export const adminPassword = () => process.env.ADMIN_PASSWORD || "zona2026";
+export const adminEmail = () => (process.env.ADMIN_EMAIL || "admin@zona.com").toLowerCase();
 
 const enc = new TextEncoder();
 
