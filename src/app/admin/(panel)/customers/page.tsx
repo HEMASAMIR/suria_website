@@ -74,7 +74,7 @@ export default function CustomersPage() {
         <button onClick={shareWa} className="btn bg-[#25D366] py-2.5 text-white shadow-lg shadow-[#25D366]/25 hover:-translate-y-0.5"><Share2 className="size-4" /> شاركي على واتساب</button>
       </PageHeader>
 
-      <div className="mb-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <div className="mb-6 grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
         <StatCard icon={Users} label="إجمالي العملاء" value={String(items.length)} hint="حسابات مسجلة" />
         <StatCard icon={UserPlus} label="سجّلوا الشهر ده" value={String(items.filter((c) => c.createdAt.startsWith(month)).length)} hint="عميلات جدد" />
         <StatCard icon={ShoppingBag} label="عملاء اشتروا" value={String(buyers)} hint={`مبيعات الأعضاء ${egp(revenue)}`} />

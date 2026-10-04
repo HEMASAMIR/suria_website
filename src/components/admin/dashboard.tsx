@@ -101,7 +101,7 @@ export function Dashboard({ orders, expenses, lowStock, now }: { orders: Order[]
         </div>
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
         <StatCard icon={Banknote} label="المبيعات (بدون الشحن)" value={egp(m.revenue)} hint={`${m.valid} طلب نشط`} />
         <StatCard icon={TrendingUp} label="إجمالي الربح" value={egp(m.gross)} tone="text-emerald-600 dark:text-emerald-400" hint={`المحقق منه ${egp(m.realized)}`} />
         <StatCard icon={Receipt} label="المصروفات" value={egp(m.exp)} tone="text-rose-600" />

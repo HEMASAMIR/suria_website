@@ -50,7 +50,7 @@ export default function ProductsPage() {
         <button onClick={() => setEdit({ ...EMPTY, categoryId: cats[0]?.id ?? "" })} className="btn-primary py-2.5"><Plus className="size-4" /> منتج جديد</button>
       </PageHeader>
 
-      <div className="mb-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="mb-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
         <StatCard label="إجمالي المنتجات" value={String(items.length)} />
         <StatCard label="قطع في المخزون" value={items.reduce((s, p) => s + p.stock, 0).toLocaleString("en")} />
         <StatCard label="قيمة المخزون (بالتكلفة)" value={egp(stockValue)} />

@@ -23,7 +23,7 @@ export default function ShippingPage() {
       summary={(items) => {
         const fees = items.map((i) => i.fee);
         return (
-          <div className="grid gap-3 sm:grid-cols-3">
+          <div className="grid gap-5 sm:grid-cols-3">
             <StatCard label="عدد المحافظات" value={String(items.length)} />
             <StatCard label="أقل سعر شحن" value={egp(fees.length ? Math.min(...fees) : 0)} />
             <StatCard label="أعلى سعر شحن" value={egp(fees.length ? Math.max(...fees) : 0)} />

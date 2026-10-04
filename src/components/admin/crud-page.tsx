@@ -97,7 +97,7 @@ export function CrudPage<T extends { id: string }>({ collection, title, sub, sin
   const counts = { all: items.length, on: items.filter((i) => (i as unknown as Row).active).length, off: items.filter((i) => !(i as unknown as Row).active).length };
 
   const actions = (row: T, light = false) => (
-    <div className="flex items-center gap-1.5">
+    <div className="flex items-center gap-2">
       {hasActive && (
         <button onClick={() => quickToggle(row)} title={(row as unknown as Row).active ? "إخفاء" : "إظهار"} className={`grid size-9 place-items-center rounded-xl border transition ${light ? "border-white/30 bg-white/15 text-white backdrop-blur hover:bg-white hover:text-ink" : "border-line bg-surface hover:border-primary hover:text-primary"}`}>
           {(row as unknown as Row).active ? <Eye className="size-4" /> : <EyeOff className="size-4" />}
@@ -120,7 +120,7 @@ export function CrudPage<T extends { id: string }>({ collection, title, sub, sin
       {summary && !loading && <div className="mb-6">{summary(items)}</div>}
 
       {/* Toolbar */}
-      <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="mb-5 flex flex-wrap items-center gap-3 rounded-[1.5rem] border border-line bg-surface/80 p-2.5 shadow-[0_15px_40px_-30px_rgba(14,44,78,.4)] backdrop-blur">
+      <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="mb-6 flex flex-wrap items-center gap-3 rounded-[1.5rem] border border-line bg-surface/80 p-2.5 shadow-[0_15px_40px_-30px_rgba(14,44,78,.4)] backdrop-blur">
         {searchKeys.length > 0 && (
           <div className="flex min-w-56 flex-1 items-center gap-2 rounded-2xl bg-surface-2 px-4 transition focus-within:ring-4 focus-within:ring-primary/10">
             <Search className="size-4 text-primary" />
@@ -159,7 +159,7 @@ export function CrudPage<T extends { id: string }>({ collection, title, sub, sin
           action={!items.length ? <button onClick={() => setEdit({ data: { ...defaults } })} className="btn-primary"><Plus className="size-4" /> إضافة {singular}</button> : undefined}
         />
       ) : view === "grid" && card ? (
-        <motion.div layout className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+        <motion.div layout className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
           <AnimatePresence mode="popLayout">
             {list.map((row, i) => {
               const c = card(row);
@@ -192,8 +192,8 @@ export function CrudPage<T extends { id: string }>({ collection, title, sub, sin
                       {c.subtitle && <p dir="ltr" className="text-right text-xs text-white/70">{c.subtitle}</p>}
                     </div>
                   </div>
-                  <div className="p-4">
-                    <div className="line-clamp-2 min-h-10 text-sm text-muted">{c.body}</div>
+                  <div className="p-5">
+                    <div className="line-clamp-2 min-h-12 text-sm leading-6 text-muted">{c.body}</div>
                     {hasActive && (
                       <div className="mt-4 flex items-center justify-between border-t border-line pt-3">
                         <span className={`flex items-center gap-1.5 text-xs font-bold ${off ? "text-muted" : "text-emerald-600 dark:text-emerald-400"}`}>
@@ -215,8 +215,8 @@ export function CrudPage<T extends { id: string }>({ collection, title, sub, sin
             <table className="w-full min-w-[680px] text-sm">
               <thead>
                 <tr className="bg-gradient-to-l from-surface-2 to-surface text-right text-[11px] font-extrabold tracking-wide text-muted">
-                  {columns.map((c) => <th key={c.label} className="px-5 py-4">{c.label}</th>)}
-                  <th className="w-32 px-5 py-4 text-left">الإجراءات</th>
+                  {columns.map((c) => <th key={c.label} className="px-6 py-5">{c.label}</th>)}
+                  <th className="w-36 px-6 py-5 text-left">الإجراءات</th>
                 </tr>
               </thead>
               <tbody>
@@ -229,13 +229,13 @@ export function CrudPage<T extends { id: string }>({ collection, title, sub, sin
                     className="group relative border-t border-line transition hover:bg-primary-soft/40"
                   >
                     {columns.map((c, ci) => (
-                      <td key={c.label} className={`px-5 py-4 ${ci === 0 ? "relative" : ""} ${c.className ?? ""}`}>
+                      <td key={c.label} className={`px-6 py-5 align-middle ${ci === 0 ? "relative" : ""} ${c.className ?? ""}`}>
                         {ci === 0 && <span className="absolute inset-y-3 right-0 w-1 origin-center scale-y-0 rounded-l-full bg-gradient-to-b from-primary to-gold transition duration-300 group-hover:scale-y-100" />}
                         {c.render(row)}
                       </td>
                     ))}
-                    <td className="px-5 py-4">
-                      <div className="flex justify-end opacity-70 transition group-hover:opacity-100">{actions(row)}</div>
+                    <td className="px-6 py-5">
+                      <div className="flex justify-end opacity-75 transition group-hover:opacity-100">{actions(row)}</div>
                     </td>
                   </motion.tr>
                 ))}

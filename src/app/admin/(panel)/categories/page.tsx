@@ -33,22 +33,22 @@ export default function CategoriesPage() {
         {
           label: "القسم",
           render: (c) => (
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-4">
               {c.image ? (
                 // eslint-disable-next-line @next/next/no-img-element
-                <img src={c.image} alt="" className="size-12 rounded-xl object-cover" />
+                <img src={c.image} alt="" className="size-16 rounded-2xl object-cover shadow-md ring-2 ring-surface transition duration-500 group-hover:scale-105 group-hover:rotate-2" />
               ) : (
-                <span className="size-12 rounded-xl bg-surface-2" />
+                <span className="size-16 rounded-2xl bg-surface-2" />
               )}
-              <div>
-                <p className="font-bold">{c.name}</p>
-                <p className="text-xs text-muted" dir="ltr">/{c.slug}</p>
+              <div className="space-y-1.5">
+                <p className="text-base font-extrabold">{c.name}</p>
+                <span dir="ltr" className="inline-block rounded-lg bg-surface-2 px-2 py-0.5 font-mono text-[11px] text-muted">/{c.slug}</span>
               </div>
             </div>
           ),
         },
-        { label: "الوصف", render: (c) => <span className="line-clamp-1 text-muted">{c.description}</span> },
-        { label: "الترتيب", render: (c) => c.order },
+        { label: "الوصف", render: (c) => <span className="line-clamp-2 max-w-xs leading-6 text-muted">{c.description}</span> },
+        { label: "الترتيب", render: (c) => <span className="grid size-9 place-items-center rounded-xl bg-gradient-to-br from-primary to-[#0e2c4e] font-serif text-sm font-bold text-white shadow-md">{c.order}</span> },
         { label: "الحالة", render: (c) => <ActiveChip on={c.active} yes="ظاهر" no="مخفي" /> },
       ]}
     />

@@ -217,7 +217,8 @@ export function ImagesInput({ value, onChange, single }: { value: string[]; onCh
 
 export function ActiveChip({ on, yes, no }: { on: boolean; yes: string; no: string }) {
   return (
-    <span className={`chip ${on ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-300" : "bg-zinc-200 text-zinc-600 dark:bg-zinc-500/20 dark:text-zinc-300"}`}>
+    <span className={`chip gap-1.5 px-3.5 py-1.5 ${on ? "bg-emerald-100 text-emerald-700 ring-1 ring-emerald-200 dark:bg-emerald-500/15 dark:text-emerald-300 dark:ring-emerald-500/20" : "bg-zinc-100 text-zinc-600 ring-1 ring-zinc-200 dark:bg-zinc-500/20 dark:text-zinc-300 dark:ring-zinc-500/20"}`}>
+      <span className={`size-1.5 rounded-full ${on ? "animate-pulse bg-emerald-500" : "bg-zinc-400"}`} />
       {on ? yes : no}
     </span>
   );

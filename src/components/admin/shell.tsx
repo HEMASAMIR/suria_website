@@ -72,24 +72,24 @@ export function AdminShell({ children, pending }: { children: React.ReactNode; p
         <button onClick={() => setOpen(false)} className="grid size-9 place-items-center rounded-full bg-white/10 lg:hidden"><X className="size-4" /></button>
       </div>
 
-      <nav className="relative flex-1 space-y-5 overflow-y-auto px-3 pb-4 [scrollbar-width:none]">
+      <nav className="relative flex-1 space-y-6 overflow-y-auto px-4 pb-6 pt-2 [scrollbar-width:none]">
         {NAV_GROUPS.map((g, gi) => (
           <div key={g.title}>
-            <p className="mb-1.5 px-4 text-[10px] font-extrabold tracking-wider text-white/35">{g.title}</p>
-            <div className="space-y-0.5">
+            <p className="mb-2.5 flex items-center gap-2 px-3 text-[11px] font-extrabold tracking-wider text-white/40"><span className="size-1.5 rounded-full bg-[#fbbf24]/70" />{g.title}<span className="h-px flex-1 bg-gradient-to-l from-transparent to-white/10" /></p>
+            <div className="space-y-1.5">
               {g.items.map((n, i) => {
                 const active = current.href === n.href;
                 return (
                   <motion.div key={n.href} initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.05 * (gi * 3 + i) }}>
-                    <Link href={n.href} onClick={() => setOpen(false)} className={`group relative flex items-center gap-3 rounded-2xl px-4 py-2.5 text-sm font-bold transition ${active ? "text-white" : "text-white/60 hover:bg-white/[.06] hover:text-white"}`}>
+                    <Link href={n.href} onClick={() => setOpen(false)} className={`group relative flex items-center gap-3.5 rounded-2xl px-3 py-2.5 text-[15px] font-bold transition duration-300 ${active ? "text-white" : "text-white/65 hover:-translate-x-1 hover:bg-white/[.07] hover:text-white"}`}>
                       {active && (
                         <motion.span layoutId="admin-nav" className="absolute inset-0 overflow-hidden rounded-2xl bg-gradient-to-l from-[#14b8a6]/90 to-[#0f766e]/70 shadow-lg shadow-[#14b8a6]/25 ring-1 ring-white/15" transition={{ type: "spring", stiffness: 400, damping: 32 }}>
                           <span className="absolute inset-0 bg-[linear-gradient(110deg,transparent_35%,rgba(255,255,255,.25)_50%,transparent_65%)] bg-[length:250%_100%] animate-shimmer" />
                           <span className="absolute inset-y-2 right-0 w-1 rounded-l-full bg-[#fbbf24]" />
                         </motion.span>
                       )}
-                      <span className={`relative grid size-8 place-items-center rounded-xl transition ${active ? "bg-white/15" : "bg-white/[.04] group-hover:bg-white/10"}`}>
-                        <n.icon className={`size-4 ${active ? "text-[#fde68a]" : "text-[#5eead4]/80"}`} />
+                      <span className={`relative grid size-10 shrink-0 place-items-center rounded-xl ring-1 transition duration-300 ${active ? "bg-white/15 ring-white/25" : "bg-white/[.05] ring-white/10 group-hover:scale-110 group-hover:bg-[#14b8a6]/25 group-hover:ring-[#5eead4]/40"}`}>
+                        <n.icon className={`size-[18px] ${active ? "text-[#fde68a]" : "text-[#5eead4]/80 group-hover:text-[#5eead4]"}`} />
                       </span>
                       <span className="relative flex-1">{n.label}</span>
                       {n.href === "/admin/orders" && pending > 0 && (
@@ -158,7 +158,7 @@ export function AdminShell({ children, pending }: { children: React.ReactNode; p
             <ThemeToggle />
           </div>
         </header>
-        <motion.main key={pathname} initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }} className="relative p-4 sm:p-8">
+        <motion.main key={pathname} initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }} className="relative mx-auto max-w-[1400px] space-y-2 p-4 sm:p-8 lg:p-10">
           {children}
         </motion.main>
       </div>

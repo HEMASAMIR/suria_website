@@ -26,7 +26,7 @@ export default function ExpensesPage() {
       summary={(items) => {
         const month = new Date().toISOString().slice(0, 7);
         return (
-          <div className="grid gap-3 sm:grid-cols-2">
+          <div className="grid gap-5 sm:grid-cols-2">
             <StatCard label="إجمالي المصروفات" value={egp(items.reduce((s, e) => s + e.amount, 0))} tone="text-rose-600" />
             <StatCard label="مصروفات الشهر الحالي" value={egp(items.filter((e) => e.date.startsWith(month)).reduce((s, e) => s + e.amount, 0))} />
           </div>
