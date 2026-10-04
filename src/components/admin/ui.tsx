@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, animate, motion, useInView } from "framer-motion";
 import { navFor } from "./nav";
-import { ImagePlus, Loader2, Trash2, X, GripVertical } from "lucide-react";
+import { ImagePlus, Loader2, Sparkles, Trash2, X, GripVertical } from "lucide-react";
 import { toast } from "sonner";
 
 export async function api<T = unknown>(url: string, method = "GET", body?: unknown): Promise<T> {
@@ -269,11 +269,58 @@ export function StatCard({ label, value, tone = "", hint, icon: Icon }: { label:
 }
 
 export function Empty({ text }: { text: string }) {
+  return <EmptyState title={text} />;
+}
+
+const ORBIT = ["💗", "✨", "🛍️", "👗", "🎁", "⭐"];
+
+/** Rich animated empty state: glowing tile, orbiting emojis, ripples and an optional action. */
+export function EmptyState({ title, text, icon: Icon, action }: { title: string; text?: string; icon?: React.ComponentType<{ className?: string }>; action?: React.ReactNode }) {
   return (
-    <div className="card relative overflow-hidden py-16 text-center">
-      <span className="mx-auto grid size-16 animate-float place-items-center rounded-2xl bg-gradient-to-br from-primary/15 to-gold/15 text-2xl">✨</span>
-      <p className="mt-4 font-bold text-muted">{text}</p>
-    </div>
+    <motion.div
+      initial={{ opacity: 0, y: 24 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+      className="relative overflow-hidden rounded-[2rem] border border-line bg-surface px-6 py-16 text-center shadow-[0_20px_50px_-35px_rgba(14,44,78,.5)]"
+    >
+      <div className="grid-lines pointer-events-none absolute inset-0" />
+      <div className="pointer-events-none absolute -right-20 -top-20 size-64 rounded-full bg-primary/10 blur-3xl" />
+      <div className="pointer-events-none absolute -bottom-20 -left-20 size-64 rounded-full bg-gold/10 blur-3xl" />
+
+      <div className="relative mx-auto grid size-44 place-items-center">
+        {[0, 1, 2].map((r) => (
+          <motion.span
+            key={r}
+            className="absolute inset-0 rounded-full border border-primary/25"
+            initial={{ scale: 0.5, opacity: 0.8 }}
+            animate={{ scale: 1.25, opacity: 0 }}
+            transition={{ duration: 3, repeat: Infinity, delay: r, ease: "easeOut" }}
+          />
+        ))}
+        <motion.div className="absolute inset-0" animate={{ rotate: 360 }} transition={{ duration: 22, repeat: Infinity, ease: "linear" }}>
+          {ORBIT.map((e, i) => {
+            const ang = (i / ORBIT.length) * Math.PI * 2;
+            return (
+              <span key={i} className="absolute grid size-9 place-items-center rounded-full bg-surface text-base shadow-lg ring-1 ring-line" style={{ left: `calc(50% + ${Math.cos(ang) * 80}px - 18px)`, top: `calc(50% + ${Math.sin(ang) * 80}px - 18px)` }}>
+                <motion.span animate={{ rotate: -360 }} transition={{ duration: 22, repeat: Infinity, ease: "linear" }}>{e}</motion.span>
+              </span>
+            );
+          })}
+        </motion.div>
+        <motion.span
+          animate={{ y: [0, -8, 0] }}
+          transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
+          className="relative grid size-20 place-items-center rounded-[1.75rem] bg-gradient-to-br from-primary to-[#0e2c4e] text-white shadow-2xl shadow-primary/40"
+        >
+          <span className="absolute inset-0 rounded-[1.75rem] bg-[linear-gradient(110deg,transparent_35%,rgba(255,255,255,.35)_50%,transparent_65%)] bg-[length:250%_100%] animate-shimmer" />
+          {Icon ? <Icon className="relative size-9" /> : <Sparkles className="relative size-9" />}
+        </motion.span>
+      </div>
+
+      <h3 className="relative mt-6 text-xl font-extrabold">{title}</h3>
+      {text && <p className="relative mx-auto mt-2 max-w-md text-sm leading-7 text-muted">{text}</p>}
+      {action && <div className="relative mt-6 flex flex-wrap justify-center gap-2">{action}</div>}
+    </motion.div>
   );
 }
 

@@ -14,6 +14,13 @@ export default function CategoriesPage() {
       defaults={{ name: "", slug: "", description: "", image: "", order: 99, active: true }}
       searchKeys={["name", "slug"]}
       sort={(a, b) => a.order - b.order}
+      card={(c) => ({
+        image: c.image,
+        title: c.name,
+        subtitle: `/${c.slug}`,
+        body: c.description || "بدون وصف",
+        badge: <span className="rounded-full bg-white/90 px-2.5 py-1 font-serif text-xs font-bold text-[#0e2c4e] shadow">#{c.order}</span>,
+      })}
       fields={[
         { key: "name", label: "اسم القسم", required: true },
         { key: "slug", label: "الرابط (بالإنجليزي)", placeholder: "pajamas" },
