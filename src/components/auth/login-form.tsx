@@ -26,6 +26,12 @@ export function LoginForm() {
       setBusy(false);
       return toast.error(d.error);
     }
+    if (d.admin) {
+      toast.success("أهلاً بيك في لوحة التحكم ✨");
+      router.replace("/admin");
+      router.refresh();
+      return;
+    }
     toast.success(`أهلاً بيكي يا ${d.customer.name.split(" ")[0]} 💗`);
     router.replace(next);
     router.refresh();

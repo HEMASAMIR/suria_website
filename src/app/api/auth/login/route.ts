@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { CUSTOMER_COOKIE, createCustomerToken } from "@/lib/auth";
+import { CUSTOMER_COOKIE, SESSION_COOKIE, adminEmail, adminPassword, createCustomerToken, createToken } from "@/lib/auth";
 import { mutateDB, readDB } from "@/lib/db";
 import { checkPassword, clearFailures, normalizePhone, publicCustomer, recordFailure, tooManyAttempts } from "@/lib/customers";
 
@@ -8,6 +8,15 @@ export async function POST(req: Request) {
   const raw = body.login?.trim() ?? "";
   const key = raw.toLowerCase();
   if (tooManyAttempts(key)) return NextResponse.json({ error: "محاولات كتير — جربي تاني بعد 10 دقايق" }, { status: 429 });
+
+  // Admin credentials typed into the shared login form → open the admin panel.
+  if (key === adminEmail() && body.password === adminPassword()) {
+    clearFailures(key);
+    const { token, maxAge } = await createToken();
+    const res = NextResponse.json({ admin: true });
+    res.cookies.set(SESSION_COOKIE, token, { httpOnly: true, sameSite: "lax", secure: process.env.NODE_ENV === "production", path: "/", maxAge });
+    return res;
+  }
 
   const db = await readDB();
   const phone = normalizePhone(raw);
